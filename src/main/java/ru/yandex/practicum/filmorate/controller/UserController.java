@@ -29,8 +29,8 @@ public class UserController {
         checkUsers(user);
         if (users.containsKey(user.getId()))
             throw new ValidationException("Такой пользователь уже существует");
-
         users.put(idCounter++, user);
+        log.warn("Добавлен пользователь {}", user.getName() );
         return user;
     }
 
@@ -41,6 +41,7 @@ public class UserController {
         users.remove(user.getId());
         checkUsers(user);
         users.put(user.getId(), user);
+        log.warn("Обновлен пользователь {}", user.getName() );
         return user;
     }
 

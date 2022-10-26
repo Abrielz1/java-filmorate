@@ -34,6 +34,7 @@ public class FilmController {
     public Film create(@RequestBody Film film) {
         checkFilm(film);
         films.put(idCounter++, film);
+        log.warn("Добавлен фильм {}", film.getName() );
         return film;
     }
 
@@ -43,6 +44,7 @@ public Film put (@RequestBody Film film) {
         films.remove(film.getId());
         checkFilm(film);
         films.put(idCounter++, film);
+        log.warn("Обновлен фильм {}", film.getName() );
         return film;
     }
     public void checkFilm (@RequestBody Film film) {
