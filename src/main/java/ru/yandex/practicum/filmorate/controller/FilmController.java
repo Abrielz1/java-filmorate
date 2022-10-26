@@ -14,7 +14,7 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/films")
 public class FilmController {
-    private static final LocalDate DATE = LocalDate.of(1895, 12, 28);
+    private static final LocalDate FIRST_FILM_DATE = LocalDate.of(1895, 12, 28);
     private int filmId = 1;
     private final Map<Integer, Film> films = new HashMap<>();
 
@@ -48,8 +48,8 @@ public class FilmController {
     private void validate(@RequestBody Film film) {
         if (film.getName() == null || film.getName().isBlank())
             throw new ValidationException("Добавьте название фильма");
-        if (film.getReleaseDate().isBefore(DATE) || film.getDuration() < 0)
-            throw new ValidationException("В тот год кина ещё не придумали");
+        if (film.getReleaseDate().isBefore(FIRST_FILM_DATE) || film.getDuration() < 0)
+            throw new ValidationException("В то время кино еще не было или продолжительность неверная");
         if (film.getDescription().length() > 200)
             throw new ValidationException("Слишком длинное описание");
     }
@@ -58,7 +58,7 @@ public class FilmController {
         Collection<Film> filmCollection = films.values();
         for (Film fl : filmCollection) {
             if (film.getName().equals(fl.getName()) && film.getReleaseDate().equals(fl.getReleaseDate()))
-                throw new ValidationException("Такой фильм уже добавлен");
+                throw new ValidationException("Такой фильм уже есть");
         }
     }
 }

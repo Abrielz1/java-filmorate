@@ -37,7 +37,7 @@ public class UserController {
     public User put(@RequestBody User user) {
         validate(user);
         if (!users.containsKey(user.getId()))
-            throw new ValidationException("Пользователя не существует");
+            throw new ValidationException("Пользователя не существует, необходима регистрация нового пользователя");
         users.remove(user.getId());
         checkUsers(user);
         users.put(user.getId(), user);
@@ -53,7 +53,7 @@ public class UserController {
         }
         if (user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
         if (user.getBirthday().isAfter(LocalDate.now()))
-            throw new ValidationException("до 13 вход воспрещён!");
+            throw new ValidationException("До 13 вход воспрещён");
     }
 
     private void checkUsers(@RequestBody User user) {
