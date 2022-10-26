@@ -37,7 +37,7 @@ public class FilmController {
         return film;
     }
 
-    @RequestMapping
+    @PutMapping
 public Film put (@RequestBody Film film) {
         if (!films.containsKey(film.getId())) throw new ValidationException("Кина такого нет!");
         films.remove(film.getId());
