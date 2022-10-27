@@ -51,9 +51,10 @@ public class UserController {
             throw new ValidationException("Логин не может быть пустым или содержать пробелы");
         }
         if (user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
-        if (user.getBirthday().isAfter(LocalDate.now()))
+        if (user.getBirthday().isAfter(LocalDate.now())) {
             log.warn("Возраст '{}'", user.getBirthday());
             throw new ValidationException("Вход до 13 лет запрещён!");
+        }
     }
 
     private void checkUsers(@RequestBody User user) {

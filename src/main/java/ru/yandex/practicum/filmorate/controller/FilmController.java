@@ -49,17 +49,20 @@ public class FilmController {
           if (film.getReleaseDate().isBefore(DATE) || film.getDuration() < 0) {
             log.warn("film.getReleaseDate film release date: '{}'/n film.getDuration film duration: {}", film.getReleaseDate(), film.getDuration());
             throw new ValidationException("В то время кино еще не было или продолжительность неверная");
-        } if (film.getDescription().length() > 200)
-            log.warn("film.getDescription описание: '{}'", film.getDescription());
-            throw new ValidationException("Слишком длинное описание");
+          }
+          if (film.getDescription().length() > 200) {
+              log.warn("film.getDescription описание: '{}'", film.getDescription());
+              throw new ValidationException("Слишком длинное описание");
+          }
     }
 
     private void checkFilm(@RequestBody Film film) {
         Collection<Film> filmCollection = films.values();
         for (Film fl : filmCollection) {
-            if (film.getName().equals(fl.getName()) && film.getReleaseDate().equals(fl.getReleaseDate()))
+            if (film.getName().equals(fl.getName()) && film.getReleaseDate().equals(fl.getReleaseDate())) {
                 log.warn("film film: '{}'/n fl film: {}", film, fl);
                 throw new ValidationException("Такой фильм уже есть");
+            }
         }
     }
 }
