@@ -14,7 +14,6 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/users")
-
 public class UserController {
     private int userId = 1;
     private final Map<Integer, User> users = new HashMap<>();
@@ -26,7 +25,6 @@ public class UserController {
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-
         validate(user);
         checkUsers(user);
         user.setId(userId++);
@@ -37,7 +35,6 @@ public class UserController {
 
     @PutMapping
     public User put(@Valid @RequestBody User user) {
-
         validate(user);
         if (!users.containsKey(user.getId()))
             throw new ValidationException("Пользователя не существует, необходима регистрация нового пользователя");
@@ -49,20 +46,21 @@ public class UserController {
     }
 
     private void validate(@Valid @RequestBody User user) {
-
         if (user.getLogin().contains(" ")) {
+            log.warn("Логин юзера '{}'", user.getLogin());
             throw new ValidationException("Логин не может быть пустым или содержать пробелы");
         }
         if (user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
         if (user.getBirthday().isAfter(LocalDate.now()))
+            log.warn("Возраст '{}'", user.getBirthday());
             throw new ValidationException("Вход до 13 лет запрещён!");
     }
 
     private void checkUsers(@RequestBody User user) {
-
         Collection<User> userCollection = users.values();
         for (User us : userCollection) {
             if (user.getLogin().equals(us.getLogin()) || user.getEmail().equals(us.getEmail()) ) {
+                log.warn("user e-mail: '{}'/n us email: {}", user, us);
                 throw new ValidationException("Пользователь с таким email или login уже существует");
             }
         }
