@@ -20,6 +20,7 @@ public class User {
     private final String login;
     private String name;
     @NotNull
+    @PastOrPresent
     private final LocalDate birthday;
 
 }

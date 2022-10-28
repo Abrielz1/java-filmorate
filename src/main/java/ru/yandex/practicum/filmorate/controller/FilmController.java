@@ -50,10 +50,10 @@ public class FilmController {
             log.warn("film.getReleaseDate film release date: '{}'\n film.getDuration film duration: {}", film.getReleaseDate(), film.getDuration());
             throw new ValidationException("В то время кино еще не было или продолжительность неверная");
         }
-          if (film.getDescription().length() > 200) {
-              log.warn("film.getDescription описание: '{}'", film.getDescription());
-              throw new ValidationException("Слишком длинное описание");
-          }
+//          if (film.getDescription().length() > 200) {
+//              log.warn("film.getDescription описание: '{}'", film.getDescription());
+//              throw new ValidationException("Слишком длинное описание");
+//          }
     }
 
     private void checkFilm(@RequestBody Film film) {
