@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +25,6 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         validate(user);
-        checkUsers(user);
         user.setId(userId++);
         users.put(user.getId(), user);
         log.info("Добавлен пользователь с логином {}", user.getLogin());
@@ -39,7 +37,6 @@ public class UserController {
         if (!users.containsKey(user.getId()))
             throw new ValidationException("Пользователя не существует, необходима регистрация нового пользователя");
         users.remove(user.getId());
-        checkUsers(user);
         users.put(user.getId(), user);
         log.info("Информация о пользователе {} обновлена", user.getLogin());
         return user;
@@ -51,13 +48,6 @@ public class UserController {
             throw new ValidationException("Логин не может быть пустым или содержать пробелы");
         }
         if (user.getName() == null || user.getName().isBlank()) user.setName(user.getLogin());
-//          if (user.getBirthday().isAfter(LocalDate.now())) {
-//          log.warn("Возраст '{}'", user.getBirthday());
-//          throw new ValidationException("Вход до 13 лет запрещён!");
-//          }
-    }
-
-    private void checkUsers(@RequestBody User user) {
         Collection<User> userCollection = users.values();
         for (User us : userCollection) {
             if (user.getLogin().equals(us.getLogin()) || user.getEmail().equals(us.getEmail()) ) {
