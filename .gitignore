@@ -1,14 +1,5 @@
-*.class
-*.log
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-hs_err_pid*
-out/
+HELP.md
+temp/
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -30,10 +21,10 @@ target/
 *.ipr
 
 ### NetBeans ###
-/nbproject/private/
-/nbbuild/
+\nbproject/private/
+\nbbuild/
 /dist/
-/nbdist/
+\nbdist/
 /.nb-gradle/
 build/
 !**/src/main/**/build/
@@ -41,6 +32,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-*.db
-db/*
