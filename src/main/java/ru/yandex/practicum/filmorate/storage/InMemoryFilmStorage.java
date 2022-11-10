@@ -1,13 +1,11 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.InternalException;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +15,7 @@ import java.util.Map;
 public class InMemoryFilmStorage implements FilmStorage {
 
     private final Map<Integer, Film> films = new HashMap<>();
-    private static final LocalDate FIRST_FILM_DATE = LocalDate.of(1895, 12, 28);
+
     private int filmId = 1;
 
     @Override
@@ -41,7 +39,9 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film update(Film film) {
-        if (!films.containsKey(film.getId())) throw new ObjectNotFoundException("Такого фильма нет");
+        if (!films.containsKey(film.getId())) {
+            throw new ObjectNotFoundException("Такого фильма нет");
+        }
         films.put(film.getId(), film);
         log.info("Информация о фильме {} обновлена", film.getName());
         return film;
@@ -60,8 +60,15 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     public void checkFilms(Film film) {
-        if (findAll().stream().anyMatch(fl -> fl.getName().equals(film.getName())
-                && fl.getReleaseDate().equals(film.getReleaseDate())))
+        if (check(film)) {
             throw new InternalException("Такой фильм уже есть");
+        }
+    }
+
+    private boolean check(Film film) {
+       return findAll().
+                stream().
+                anyMatch(film1 -> film1.getName().equals(film.getName())
+                        && film1.getReleaseDate().equals(film.getReleaseDate()));
     }
 }

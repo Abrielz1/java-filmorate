@@ -1,26 +1,24 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.model.Film;
+import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+
+import java.util.stream.Collectors;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class FilmService {
 
-    FilmStorage filmStorage;
-
-    @Autowired
-    public FilmService(FilmStorage filmStorage) {
-        this.filmStorage = filmStorage;
-    }
+    private final FilmStorage filmStorage;
 
     public Collection<Film> findAll() {
         log.info("Список фильмов отправлен");
@@ -37,24 +35,27 @@ public class FilmService {
     }
 
     public Film getById(int id) {
-        if (!filmStorage.getFilms().containsKey(id))
+        if (!filmStorage.getFilms().containsKey(id)) {
             throw new ObjectNotFoundException("Фильм не найден");
+        }
         log.info("Фильм с id {} отправлен", id);
 
         return filmStorage.getById(id);
     }
 
     public Film deleteById(int id) {
-        if (!filmStorage.getFilms().containsKey(id))
+        if (!filmStorage.getFilms().containsKey(id)) {
             throw new ObjectNotFoundException("Фильм отсутствует, удаление не возможно");
+        }
         log.info("Фильм с id {} удален", id);
 
         return filmStorage.deleteById(id);
     }
 
     public Film addLike(int filmId, int userId) {
-        if (!filmStorage.getFilms().containsKey(filmId))
+        if (!filmStorage.getFilms().containsKey(filmId)) {
             throw new ObjectNotFoundException("Фильм не найден");
+        }
         filmStorage.getById(filmId).getUsersLikes().add(userId);
         log.info("Пользователь {} поставил лайк фильму {}", userId, filmId);
 
@@ -62,10 +63,12 @@ public class FilmService {
     }
 
     public Film removeLike(int filmId, int userId) {
-        if (!filmStorage.getFilms().containsKey(filmId))
+        if (!filmStorage.getFilms().containsKey(filmId)) {
             throw new ObjectNotFoundException("Фильм не найден");
-        if (!filmStorage.getById(filmId).getUsersLikes().contains(userId))
+        }
+        if (!filmStorage.getById(filmId).getUsersLikes().contains(userId)) {
             throw new ObjectNotFoundException("Лайк от пользователя отсутствует");
+        }
         filmStorage.getById(filmId).getUsersLikes().remove(userId);
         log.info("Пользователь {} удалил лайк к фильму {}", userId, filmId);
 

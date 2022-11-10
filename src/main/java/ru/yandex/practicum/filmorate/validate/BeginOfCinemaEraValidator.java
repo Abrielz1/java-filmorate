@@ -1,7 +1,7 @@
-package ru.yandex.practicum.filmorate.exception;
+package ru.yandex.practicum.filmorate.validate;
 
-import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
 import java.time.LocalDate;
 
 public class BeginOfCinemaEraValidator implements ConstraintValidator<BeginOfCinemaEra, LocalDate> {

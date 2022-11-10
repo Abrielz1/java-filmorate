@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserStorageTests {
 
-    InMemoryUserStorage userStorage;
+    private InMemoryUserStorage userStorage;
     User user;
 
     @BeforeEach
