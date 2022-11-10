@@ -66,9 +66,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     private boolean check(Film film) {
-       return findAll().
-                stream().
-                anyMatch(film1 -> film1.getName().equals(film.getName())
+       return findAll().stream()
+               .anyMatch(film1 -> film1.getName().equals(film.getName())
                         && film1.getReleaseDate().equals(film.getReleaseDate()));
     }
 }
