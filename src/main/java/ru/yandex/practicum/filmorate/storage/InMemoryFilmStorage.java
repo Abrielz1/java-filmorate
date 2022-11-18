@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.Getter;
 import ru.yandex.practicum.filmorate.exception.InternalException;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -14,14 +15,10 @@ import java.util.Map;
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
 
+    @Getter
     private final Map<Integer, Film> films = new HashMap<>();
 
     private int filmId = 1;
-
-    @Override
-    public Map<Integer, Film> getFilms() {
-        return films;
-    }
 
     @Override
     public Collection<Film> findAll() {

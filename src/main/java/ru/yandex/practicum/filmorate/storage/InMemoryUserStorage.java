@@ -41,7 +41,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User update(User user) {
-        if (!getUsers().containsKey(user.getId())) {
+        if (!users.containsKey(user.getId())) {
             throw new ObjectNotFoundException("Пользователя не существует," +
                     " необходима регистрация нового пользователя");
         }
