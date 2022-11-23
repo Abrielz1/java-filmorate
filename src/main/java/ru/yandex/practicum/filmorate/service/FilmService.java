@@ -48,8 +48,7 @@ public class FilmService {
             throw new ObjectNotFoundException("Фильм отсутствует, удаление не возможно");
         }
         log.info("Фильм с id {} удален", id);
-
-        return filmStorage.deleteById(id);
+        return  filmStorage.deleteById(id);
     }
 
     public Film addLike(int filmId, int userId) {

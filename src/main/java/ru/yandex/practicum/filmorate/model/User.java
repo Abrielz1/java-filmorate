@@ -16,7 +16,6 @@ public class User {
     private int id;
     @NotBlank(message = "Отсутствует email")
     @Email(message = "Некорректный email")
-    @Email
     private final String email;
     @NotNull(message = "Отсутствует логин")
     @Pattern(regexp = "\\S+", message = "Логин содержит пробелы")
