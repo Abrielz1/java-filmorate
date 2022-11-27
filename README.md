@@ -6,3 +6,4 @@ Template repository for Filmorate project.
 This is my sql scheme
 
 https://app.quickdatabasediagrams.com/#/
+
