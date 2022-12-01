@@ -7,34 +7,14 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.assertj.core.api.AssertionsForClassTypes;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.jdbc.core.JdbcTemplate;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.sql.ResultSet;
-import java.sql.Date;
-import java.util.*;
 import org.assertj.core.api.Assertions;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
-import java.util.*;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.InDbUserStorage;
 
-import java.time.LocalDate;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
