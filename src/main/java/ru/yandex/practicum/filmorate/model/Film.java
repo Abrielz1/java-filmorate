@@ -1,21 +1,18 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.RequiredArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import ru.yandex.practicum.filmorate.validate.BeginOfCinemaEra;
-
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import lombok.*;
 
-@RequiredArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
 public class Film {
 
-    private Set<Integer> usersLikes = new HashSet<>();
 
     @PositiveOrZero
     private int id;
@@ -30,7 +27,5 @@ public class Film {
     @Min(value = 1, message = "Неправильная продолжительность фильма")
     @Positive
     private long duration;
-    private String genre;
-    private RatingMpa rating_mpa;
-
-}
+    private Mpa mpa;
+    private List<Genre> genres;
