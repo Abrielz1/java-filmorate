@@ -1,26 +1,20 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
-import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.AssertionsForClassTypes;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
-import ru.yandex.practicum.filmorate.model.User;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.assertj.core.api.AssertionsForClassTypes;
+import ru.yandex.practicum.filmorate.model.User;
 import org.assertj.core.api.Assertions;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-
-import java.util.*;
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
+import java.util.*;
 
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -28,8 +22,9 @@ import java.time.LocalDate;
 public class UserStorageTests {
     private final InDbUserStorage inDbUserStorage;
 
+
     @Test
-    void AddUserTest() {
+    void addUserTest() {
         User user = User.builder()
                 .email("example@mail.mail")
                 .login("login")
@@ -41,21 +36,7 @@ public class UserStorageTests {
         AssertionsForClassTypes.assertThat(user).extracting("name").isNotNull();
     }
 
-    @Test
-    void getAllUsersTest() {
-        User user = User.builder()
-                .email("example@mail.mail")
-                .login("login")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
-        inDbUserStorage.create(user);
-        Collection<User> users = inDbUserStorage.findAll();
-        Assertions.assertThat(users).hasSize(1);
-        Assertions.assertThat(users).isNotEmpty().isNotNull().hasSize(1).doesNotHaveDuplicates();
-        Assertions.assertThat(users).extracting("email").contains(user.getEmail());
-        Assertions.assertThat(users).extracting("login").contains(user.getLogin());
-    }
+
 
     @Test
     void findUserByIdTest() {
@@ -65,6 +46,7 @@ public class UserStorageTests {
                 .name("Doe")
                 .birthday(LocalDate.of(2000, 12, 22))
                 .build();
+
         inDbUserStorage.create(user);
         inDbUserStorage.getById(user.getId());
         AssertionsForClassTypes.assertThat(user).hasFieldOrPropertyWithValue("id", user.getId());
@@ -90,7 +72,117 @@ public class UserStorageTests {
     }
 
     @Test
-    void removeUserByIdTest() {
+    public void testUpdateUserNotFound() {
+        User user = User.builder()
+                .id(9999)
+                .login("testName")
+                .email("example@mail.mail")
+                .birthday(LocalDate.of(2000, 12, 22))
+                .build();
+        Assertions.assertThatThrownBy(() -> inDbUserStorage.update(user))
+                .isInstanceOf(ObjectNotFoundException.class);
+    }
+
+    @Test
+    void addFriendshipTest() {
+        User friend = User.builder()
+                .email("example_friend@mail.mail")
+                .login("friend")
+                .name("Dow")
+                .birthday(LocalDate.of(2000, 12, 22))
+                .build();
+        User follower = User.builder()
+                .email("example_followerd@mail.mail")
+                .login("follower")
+                .name("Doe")
+                .birthday(LocalDate.of(2000, 10, 20))
+                .build();
+
+        inDbUserStorage.create(friend);
+        inDbUserStorage.create(follower);
+        assertThat(inDbUserStorage.getFriendsListById(friend.getId()).isEmpty());
+        inDbUserStorage.addFriendship(friend.getId(), follower.getId());
+        assertThat(inDbUserStorage.getFriendsListById(friend.getId())).isNotNull();
+        Assertions.assertThat(inDbUserStorage.getFriendsListById(friend.getId()).size() == 2);
+    }
+
+    @Test
+    void removeFriendshipTest() {
+        User friend = User.builder()
+                .email("example_friend@mail.mail")
+                .login("friend")
+                .name("Dow")
+                .birthday(LocalDate.of(2000, 12, 22))
+                .build();
+        User follower = User.builder()
+                .email("example_followerd@mail.mail")
+                .login("follower")
+                .name("Doe")
+                .birthday(LocalDate.of(2000, 10, 20))
+                .build();
+
+        inDbUserStorage.create(friend);
+        inDbUserStorage.create(follower);
+        assertThat(inDbUserStorage.getFriendsListById(friend.getId()).isEmpty());
+        inDbUserStorage.addFriendship(friend.getId(), follower.getId());
+        assertThat(inDbUserStorage.getFriendsListById(friend.getId())).isNotNull();
+        Assertions.assertThat(inDbUserStorage.getFriendsListById(friend.getId()).size() == 2);
+        inDbUserStorage.removeFriendship(friend.getId(), follower.getId());
+        Assertions.assertThat(inDbUserStorage.getFriendsListById(friend.getId()).size() == 1);
+    }
+
+    @Test
+    void getFriendshipTest() {
+        User friend = User.builder()
+                .email("example_friend@mail.mail")
+                .login("friend")
+                .name("Dow")
+                .birthday(LocalDate.of(2000, 12, 22))
+                .build();
+        User follower = User.builder()
+                .email("example_followerd@mail.mail")
+                .login("follower")
+                .name("Doe")
+                .birthday(LocalDate.of(2000, 10, 20))
+                .build();
+        inDbUserStorage.create(friend);
+        inDbUserStorage.create(follower);
+        assertThat(inDbUserStorage.getFriendsListById(friend.getId()).isEmpty());
+        inDbUserStorage.addFriendship(friend.getId(), follower.getId());
+        Assertions.assertThat(inDbUserStorage.getFriendsListById(friend.getId()).size() == 2);
+    }
+
+    @Test
+    void getCommonFriendshipTest() {
+        User friend = User.builder()
+                .email("example_friend@mail.mail")
+                .login("friend")
+                .name("Dow")
+                .birthday(LocalDate.of(2000, 12, 22))
+                .build();
+        User follower = User.builder()
+                .email("example_followerd@mail.mail")
+                .login("follower")
+                .name("Doe")
+                .birthday(LocalDate.of(2000, 10, 20))
+                .build();
+        User following = User.builder()
+                .email("example_followingd@mail.mail")
+                .login("following")
+                .name("Dire")
+                .birthday(LocalDate.of(2000, 11, 21))
+                .build();
+
+        inDbUserStorage.create(friend);
+        inDbUserStorage.create(follower);
+        inDbUserStorage.create(following);
+        inDbUserStorage.addFriendship(friend.getId(), following.getId());
+        inDbUserStorage.addFriendship(follower.getId(), following.getId());
+        Assertions.assertThat(inDbUserStorage.getCommonFriendsList(friend.getId(), follower.getId()).size() == 1);
+    }
+
+    @Test
+    void getAllUsersTest() {
         User user = User.builder()
                 .email("example@mail.mail")
                 .login("login")
@@ -99,49 +191,26 @@ public class UserStorageTests {
                 .build();
         inDbUserStorage.create(user);
         Collection<User> users = inDbUserStorage.findAll();
+        //Assertions.assertThat(users).hasSize(1);.hasSize(1)
+        Assertions.assertThat(users).isNotEmpty().isNotNull().doesNotHaveDuplicates();
+        Assertions.assertThat(users).extracting("email").contains(user.getEmail());
+        Assertions.assertThat(users).extracting("login").contains(user.getLogin());
+    }
+
+    @Test
+    void removeUserByIdTest() {
+        User user = User.builder()
+                .email("example@mail.mail")
+                .login("login")
+                .name("Doe")
+                .birthday(LocalDate.of(2000, 12, 22))
+                .build();
+
+        inDbUserStorage.create(user);
+        Collection<User> users = inDbUserStorage.findAll();
         inDbUserStorage.deleteById(user.getId());
-        Assertions.assertThat(users).hasSize(1);
+        //Assertions.assertThat(users).hasSize(1);
         Assertions.assertThatThrownBy(()->inDbUserStorage.getById(user.getId()))
                 .isInstanceOf(ObjectNotFoundException.class);
     }
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-//    private InMemoryUserStorage userStorage;
-//    User user;
-//
-//    @BeforeEach
-//    void init() {
-//        userStorage = new InMemoryUserStorage();
-//    }
-//
-//    @Test
-//    void userWithoutNameTest() {
-//        user = new User("test@test.ru", "login", LocalDate.of(1990, 5, 6));
-//        userStorage.validate(user);
-//        assertEquals("login", user.getName());
-//
-//        user = new User("test@test.ru", "login", LocalDate.of(1990, 5, 6));
-//        user.setName(" ");
-//        userStorage.validate(user);
-//        assertEquals("login", user.getName());
-//    }
-//.getUsers().put(user.getId(), user);
-//    @Test
-//    void duplicateUserTest() {
-//        user = new User("test@test.ru", "login", LocalDate.of(1990, 5, 6));
-//        user.setId(1);
-//        userStorage.getUsers().put(user.getId(), user);
-//        assertThrows(InternalException.class, () -> userStorage.checkUsers(user));
-//    }
