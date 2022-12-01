@@ -146,7 +146,7 @@ public class InDbUserStorage implements UserStorage {
         return jdbcTemplate.query(SQL, this::makeUser, followedId, followerId);
     }
 
-    public User makeUser(ResultSet rs, int rowNum) throws SQLException {
+    private User makeUser(ResultSet rs, int rowNum) throws SQLException {
         int id = rs.getInt("id");
         String email = rs.getString("email");
         String login = rs.getString("login");
