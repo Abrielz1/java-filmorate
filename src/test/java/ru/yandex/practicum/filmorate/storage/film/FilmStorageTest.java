@@ -4,16 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import ru.yandex.practicum.filmorate.storage.user.InDbUserStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.assertj.core.api.AssertionsForClassTypes;
-import java.time.LocalDate;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.InDbUserStorage;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import java.time.LocalDate;
 
 
 @SpringBootTest

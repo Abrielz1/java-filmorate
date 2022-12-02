@@ -13,9 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -191,7 +188,7 @@ public class UserStorageTests {
                 .build();
         inDbUserStorage.create(user);
         Collection<User> users = inDbUserStorage.findAll();
-        //Assertions.assertThat(users).hasSize(1);.hasSize(1)
+
         Assertions.assertThat(users).isNotEmpty().isNotNull().doesNotHaveDuplicates();
         Assertions.assertThat(users).extracting("email").contains(user.getEmail());
         Assertions.assertThat(users).extracting("login").contains(user.getLogin());
@@ -209,7 +206,7 @@ public class UserStorageTests {
         inDbUserStorage.create(user);
         Collection<User> users = inDbUserStorage.findAll();
         inDbUserStorage.deleteById(user.getId());
-        //Assertions.assertThat(users).hasSize(1);
+
         Assertions.assertThatThrownBy(()->inDbUserStorage.getById(user.getId()))
                 .isInstanceOf(ObjectNotFoundException.class);
     }

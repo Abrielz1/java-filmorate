@@ -1,18 +1,15 @@
 package ru.yandex.practicum.filmorate.service;
 
-import ru.yandex.practicum.filmorate.model.Mpa;
-import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.AssertionsForClassTypes;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.time.LocalDate;
-import java.util.Arrays;
+import ru.yandex.practicum.filmorate.model.Mpa;
+import org.assertj.core.api.Assertions;
+import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Test;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Arrays;
+
 
 @SpringBootTest
 @AutoConfigureTestDatabase
