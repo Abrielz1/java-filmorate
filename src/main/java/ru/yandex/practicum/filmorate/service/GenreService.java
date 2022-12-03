@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
-import ru.yandex.practicum.filmorate.storage.genre.InDbGenreStorage;
 import ru.yandex.practicum.filmorate.model.Genre;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;

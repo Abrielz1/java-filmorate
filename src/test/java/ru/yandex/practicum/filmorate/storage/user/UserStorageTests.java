@@ -10,8 +10,8 @@ import ru.yandex.practicum.filmorate.model.User;
 import org.assertj.core.api.Assertions;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
 import java.util.Collection;
+import java.time.LocalDate;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -45,8 +45,7 @@ public class UserStorageTests {
                 .build();
 
         inDbUserStorage.create(user);
-        inDbUserStorage.getById(user.getId());
-        AssertionsForClassTypes.assertThat(user).hasFieldOrPropertyWithValue("id", user.getId());
+        AssertionsForClassTypes.assertThat(inDbUserStorage.getById(user.getId())).hasFieldOrPropertyWithValue("id", user.getId());
     }
 
     @Test
@@ -188,7 +187,6 @@ public class UserStorageTests {
                 .build();
         inDbUserStorage.create(user);
         Collection<User> users = inDbUserStorage.findAll();
-
         Assertions.assertThat(users).isNotEmpty().isNotNull().doesNotHaveDuplicates();
         Assertions.assertThat(users).extracting("email").contains(user.getEmail());
         Assertions.assertThat(users).extracting("login").contains(user.getLogin());
@@ -204,9 +202,7 @@ public class UserStorageTests {
                 .build();
 
         inDbUserStorage.create(user);
-        Collection<User> users = inDbUserStorage.findAll();
         inDbUserStorage.deleteById(user.getId());
-
         Assertions.assertThatThrownBy(()->inDbUserStorage.getById(user.getId()))
                 .isInstanceOf(ObjectNotFoundException.class);
     }

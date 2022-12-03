@@ -1,11 +1,9 @@
 package ru.yandex.practicum.filmorate.service;
 
-import ru.yandex.practicum.filmorate.storage.user.InDbUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
-
 import java.util.Collection;
 import java.util.List;
 

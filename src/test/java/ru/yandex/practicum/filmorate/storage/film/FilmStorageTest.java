@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -12,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import org.assertj.core.api.Assertions;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
@@ -50,14 +50,13 @@ public class FilmStorageTest {
         AssertionsForClassTypes.assertThat(inDbFilmStorage.getById(film.getId()))
                 .hasFieldOrPropertyWithValue("name", "testUpdateFilm")
                 .hasFieldOrPropertyWithValue("description", "testUpdateDesc");
-
     }
 
     @Test
     void getFilmTest() {
         inDbFilmStorage.create(film);
         inDbFilmStorage.getById(film.getId());
-        AssertionsForClassTypes.assertThat(film).hasFieldOrPropertyWithValue("id", film.getId());
+        AssertionsForClassTypes.assertThat(inDbFilmStorage.getById(film.getId())).hasFieldOrPropertyWithValue("id", film.getId());
     }
 
     @Test

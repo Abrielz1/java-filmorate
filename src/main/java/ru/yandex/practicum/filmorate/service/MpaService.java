@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmorate.service;
 
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
-import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import java.util.Collection;
 
