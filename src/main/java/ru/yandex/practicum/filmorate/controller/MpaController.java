@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import ru.yandex.practicum.filmorate.service.MpaService;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import lombok.RequiredArgsConstructor;
-
 import java.util.Collection;
 
 @RestController

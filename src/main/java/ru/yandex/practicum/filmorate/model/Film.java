@@ -1,18 +1,26 @@
 package ru.yandex.practicum.filmorate.model;
 
 import ru.yandex.practicum.filmorate.validate.BeginOfCinemaEra;
-import javax.validation.constraints.*;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Min;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Builder(toBuilder = true)
 public class Film {
-
 
     @PositiveOrZero
     private int id;
@@ -29,7 +37,5 @@ public class Film {
     private long duration;
     private Mpa mpa;
     private List<Genre> genres;
-
 }
-
 

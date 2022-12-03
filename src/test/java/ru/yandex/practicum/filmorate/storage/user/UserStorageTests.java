@@ -11,14 +11,14 @@ import org.assertj.core.api.Assertions;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collection;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserStorageTests {
-    private final InDbUserStorage inDbUserStorage;
 
+    private final InDbUserStorage inDbUserStorage;
 
     @Test
     void addUserTest() {
