@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.genre.InDbGenreStorage;
 import ru.yandex.practicum.filmorate.model.Genre;
 import org.springframework.stereotype.Service;
@@ -10,13 +11,13 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class GenreService {
 
-    private final InDbGenreStorage inDbGenreStorage;
+    private final GenreStorage genreStorage;
 
     public Collection<Genre> findAll() {
-        return inDbGenreStorage.findAll();
+        return genreStorage.findAll();
     }
 
     public Genre getById(int id) {
-        return inDbGenreStorage.getById(id);
+        return genreStorage.getById(id);
     }
 }

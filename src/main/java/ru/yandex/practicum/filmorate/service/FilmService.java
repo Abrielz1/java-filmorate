@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.InDbFilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilmService {
 
-    private final InDbFilmStorage filmStorage;
+    private final FilmStorage filmStorage;
 
     public Collection<Film> findAll() {
         log.info("Список фильмов отправлен");

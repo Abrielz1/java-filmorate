@@ -10,13 +10,13 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class MpaService {
 
-    private final MpaStorage inDbMpaStorage;
+    private final MpaStorage mpaStorage;
 
     public Collection<Mpa> findAll() {
-        return inDbMpaStorage.findAll();
+        return mpaStorage.findAll();
     }
 
     public Mpa getById(int id) {
-        return inDbMpaStorage.getById(id);
+        return mpaStorage.getById(id);
     }
 }

@@ -4,6 +4,8 @@ import ru.yandex.practicum.filmorate.storage.user.InDbUserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -11,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final InDbUserStorage userStorage;
+    private final UserStorage userStorage;
 
     public Collection<User> findAll() {
         return userStorage.findAll();
