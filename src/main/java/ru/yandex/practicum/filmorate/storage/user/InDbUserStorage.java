@@ -27,41 +27,46 @@ public class InDbUserStorage implements UserStorage {
 
     @Override
     public Collection<User> findAll() {
-        final String sql = "SELECT * FROM users";
+        final String sqlQuery = "SELECT * FROM users";
+
         log.info("Список пользователей отправлен");
-        return jdbcTemplate.query(sql, this::makeUser);
+        return jdbcTemplate.query(sqlQuery, this::makeUser);
     }
 
     @Override
     public User create(User user) {
-        final String sql = "INSERT INTO users (EMAIL, LOGIN, NAME, BIRTHDAY) " +
+        final String sqlQuery = "INSERT INTO users (EMAIL, LOGIN, NAME, BIRTHDAY) " +
                 "VALUES ( ?, ?, ?, ?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        KeyHolder generatedId = new GeneratedKeyHolder();
+
         jdbcTemplate.update(connection -> {
-            final PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"id"});
+            final PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"id"});
             stmt.setString(1, user.getEmail());
             stmt.setString(2, user.getLogin());
             stmt.setString(3, user.getName());
             stmt.setDate(4, Date.valueOf(user.getBirthday()));
             return stmt;
-        }, keyHolder);
+        }, generatedId);
+
         log.info("Пользователь с id {} отправлен", user.getId());
-        user.setId(keyHolder.getKey().intValue());
+        user.setId(generatedId.getKey().intValue());
         return user;
     }
 
     @Override
     public User update(User user) {
-        final String CHECK = "SELECT * FROM users WHERE id = ?";
-        SqlRowSet filmRows = jdbcTemplate.queryForRowSet(CHECK, user.getId());
+        final String checkQuery = "SELECT * FROM users WHERE id = ?";
+        SqlRowSet filmRows = jdbcTemplate.queryForRowSet(checkQuery, user.getId());
+
         if (!filmRows.next()) {
             log.warn("Пользователь с id {} не найден", user.getId());
             throw new ObjectNotFoundException("Пользователь не найден");
         }
 
-        final String sql = "UPDATE users SET EMAIL = ?, LOGIN = ?, NAME = ?, BIRTHDAY = ? " +
+        final String sqlQuery = "UPDATE users SET EMAIL = ?, LOGIN = ?, NAME = ?, BIRTHDAY = ? " +
                 "WHERE id = ?";
-        jdbcTemplate.update(sql,
+
+        jdbcTemplate.update(sqlQuery,
                 user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
         log.info("Пользователь {} обновлен", user.getId());
         return user;
@@ -69,22 +74,26 @@ public class InDbUserStorage implements UserStorage {
 
     @Override
     public User getById(int id) {
-        final String check = "SELECT * FROM users WHERE id = ?";
-        SqlRowSet filmRows = jdbcTemplate.queryForRowSet(check, id);
+        final String sqlQuery = "SELECT * FROM users WHERE id = ?";
+        SqlRowSet filmRows = jdbcTemplate.queryForRowSet(sqlQuery, id);
+
         if (!filmRows.next()) {
             log.warn("Пользователь с идентификатором {} не найден.", id);
             throw new ObjectNotFoundException("Пользователь не найден");
         }
-        final String sql = "select * from users where id = ?";
+
+        final String checkQuery = "select * from users where id = ?";
+
         log.info("Пользователь с id {} отправлен", id);
-        return jdbcTemplate.queryForObject(sql, this::makeUser, id);
+        return jdbcTemplate.queryForObject(checkQuery, this::makeUser, id);
     }
 
     @Override
     public User deleteById(int id) {
-        final String sql = "DELETE FROM users WHERE id = ?";
+        final String sqlQuery = "DELETE FROM users WHERE id = ?";
         User user = getById(id);
-        jdbcTemplate.update(sql, id);
+
+        jdbcTemplate.update(sqlQuery, id);
         log.info("Пользователь с id {} удален", id);
         return user;
     }
@@ -92,49 +101,55 @@ public class InDbUserStorage implements UserStorage {
     @Override
     public List<Integer> addFriendship(int followedId, int followerId) {
         validate(followedId, followerId);
-        final String sqlForWrite = "INSERT INTO mutual_friendship (user_id, friend_id, status) " +
+        final String sqlForWriteQuery = "INSERT INTO mutual_friendship (user_id, friend_id, status) " +
                 "VALUES (?, ?, ?)";
-        final String sqlForUpdate = "UPDATE mutual_friendship SET status = ? " +
+        final String sqlForUpdateQuery = "UPDATE mutual_friendship SET status = ? " +
                 "WHERE user_id = ? AND friend_id = ?";
-        final String checkMutual = "SELECT * FROM mutual_friendship WHERE user_id = ? AND friend_id = ?";
-        SqlRowSet userRows = jdbcTemplate.queryForRowSet(checkMutual, followedId, followerId);
+        final String checkMutualQuery = "SELECT * FROM mutual_friendship WHERE user_id = ? AND friend_id = ?";
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet(checkMutualQuery, followedId, followerId);
+
         if (userRows.first()) {
-            jdbcTemplate.update(sqlForUpdate, FriendshipStatus.CONFIRMED.toString(), followedId, followerId);
+            jdbcTemplate.update(sqlForUpdateQuery, FriendshipStatus.CONFIRMED.toString(), followedId, followerId);
         } else {
-            jdbcTemplate.update(sqlForWrite, followedId, followerId, FriendshipStatus.REQUIRED.toString());
+            jdbcTemplate.update(sqlForWriteQuery, followedId, followerId, FriendshipStatus.REQUIRED.toString());
         }
+
         log.info("Пользователь {} подписался на {}", followedId, followerId);
         return List.of(followedId, followerId);
     }
 
     @Override
     public List<Integer> removeFriendship(int followedId, int followerId) {
-        final String sql = "DELETE FROM mutual_friendship WHERE user_id = ? AND friend_id = ?";
-        jdbcTemplate.update(sql, followedId, followerId);
+        final String sqlQuery = "DELETE FROM mutual_friendship WHERE user_id = ? AND friend_id = ?";
+
+        jdbcTemplate.update(sqlQuery, followedId, followerId);
         log.info("Пользователь {} отписался от {}", followerId, followedId);
         return List.of(followedId, followerId);
     }
 
     @Override
     public List<User> getFriendsListById(int id) {
-        final String check = "SELECT * FROM users WHERE id = ?";
-        SqlRowSet followingRow = jdbcTemplate.queryForRowSet(check, id);
+        final String checkQuery = "SELECT * FROM users WHERE id = ?";
+        SqlRowSet followingRow = jdbcTemplate.queryForRowSet(checkQuery, id);
+
         if (!followingRow.next()) {
             log.warn("Пользователь с id {} не найден", id);
             throw new ObjectNotFoundException("Пользователь не найден");
         }
-        final String sql = "SELECT id, email, login, name, birthday " +
+
+        final String sqlQuery = "SELECT id, email, login, name, birthday " +
                 "FROM USERS " +
                 "LEFT JOIN mutual_friendship mf on users.id = mf.friend_id " +
                 "where user_id = ? AND status LIKE 'REQUIRED'";
+
         log.info("Запрос получения списка друзей пользователя {} выполнен", id);
-        return jdbcTemplate.query(sql, this::makeUser, id);
+        return jdbcTemplate.query(sqlQuery, this::makeUser, id);
     }
 
     @Override
     public List<User> getCommonFriendsList(int followedId, int followerId) {
         validate(followedId, followerId);
-        final String sql = "SELECT id, email, login, name, birthday " +
+        final String sqlQuery = "SELECT id, email, login, name, birthday " +
                 "FROM mutual_friendship AS mf " +
                 "LEFT JOIN users u ON u.id = mf.friend_id " +
                 "WHERE mf.user_id = ? AND mf.friend_id IN ( " +
@@ -142,16 +157,18 @@ public class InDbUserStorage implements UserStorage {
                 "FROM mutual_friendship AS mf " +
                 "LEFT JOIN users AS u ON u.id = mf.friend_id " +
                 "WHERE mf.user_id = ? )";
+
         log.info("Список общих друзей {} и {} отправлен", followedId, followerId);
-        return jdbcTemplate.query(sql, this::makeUser, followedId, followerId);
+        return jdbcTemplate.query(sqlQuery, this::makeUser, followedId, followerId);
     }
 
-    private User makeUser(ResultSet rs, int rowNum) throws SQLException {
-        int id = rs.getInt("id");
-        String email = rs.getString("email");
-        String login = rs.getString("login");
-        String name = rs.getString("name");
-        LocalDate birthday = rs.getDate("birthday").toLocalDate();
+    private User makeUser(ResultSet resultSet, int rowNum) throws SQLException {
+        int id = resultSet.getInt("id");
+        String email = resultSet.getString("email");
+        String login = resultSet.getString("login");
+        String name = resultSet.getString("name");
+        LocalDate birthday = resultSet.getDate("birthday").toLocalDate();
+
         return new User(id, email, login, name, birthday);
     }
 
@@ -159,6 +176,7 @@ public class InDbUserStorage implements UserStorage {
         final String check = "SELECT * FROM users WHERE id = ?";
         SqlRowSet followingRow = jdbcTemplate.queryForRowSet(check, followedId);
         SqlRowSet followerRow = jdbcTemplate.queryForRowSet(check, followerId);
+
         if (!followingRow.next() || !followerRow.next()) {
             log.warn("Пользователи с id {} и {} не найдены", followedId, followerId);
             throw new ObjectNotFoundException("Пользователи не найдены");

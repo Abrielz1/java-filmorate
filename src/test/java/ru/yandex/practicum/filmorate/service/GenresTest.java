@@ -19,8 +19,8 @@ public class GenresTest {
 
     @Test
     public void testGetAllGenres() {
-        Collection<Genre> genres = genre.findAll();
-        Assertions.assertThat(genres)
+        Collection<Genre> genreStorage = genre.findAll();
+        Assertions.assertThat(genreStorage)
                 .extracting(Genre::getName)
                 .containsAll(Arrays.asList("Комедия", "Драма", "Мультфильм", "Триллер", "Документальный", "Боевик"));}
 

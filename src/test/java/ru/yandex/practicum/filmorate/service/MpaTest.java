@@ -18,8 +18,8 @@ public class MpaTest {
     private final MpaService mpaService;
     @Test
     public void testGetAllMpa() {
-        Collection<Mpa> mpas = mpaService.findAll();
-        Assertions.assertThat(mpas)
+        Collection<Mpa> mpaRatingStorage = mpaService.findAll();
+        Assertions.assertThat(mpaRatingStorage)
                 .isNotEmpty()
                 .extracting(Mpa::getName)
                 .containsAll(Arrays.asList("G", "PG", "PG-13", "R", "NC-17"));

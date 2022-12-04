@@ -20,24 +20,28 @@ public class InDbGenreStorage implements GenreStorage {
 
     @Override
     public Collection<Genre> findAll() {
-        String sql = "SELECT * FROM genre";
-        return jdbcTemplate.query(sql, this::makeGenre);
+        String sqlQuery = "SELECT * FROM genre";
+
+        return jdbcTemplate.query(sqlQuery, this::makeGenre);
     }
 
     @Override
     public Genre getById(int id) {
-        final String SQL = "SELECT * FROM genre WHERE genre_id = ?";
-        SqlRowSet genreRows = jdbcTemplate.queryForRowSet(SQL, id);
+        final String sqlQuery = "SELECT * FROM genre WHERE genre_id = ?";
+        SqlRowSet genreRows = jdbcTemplate.queryForRowSet(sqlQuery, id);
+
         if (!genreRows.next()) {
             log.warn("Жанр {} не найден.", id);
             throw new ObjectNotFoundException("Жанр не найден");
+
         }
-        return jdbcTemplate.queryForObject(SQL, this::makeGenre, id);
+        return jdbcTemplate.queryForObject(sqlQuery, this::makeGenre, id);
     }
 
     private Genre makeGenre(ResultSet resultSet, int rowNum) throws SQLException {
         int id = resultSet.getInt("genre_id");
-        String name = resultSet.getString("name");
-        return new Genre(id, name);
+        String nameGenre = resultSet.getString("name");
+
+        return new Genre(id, nameGenre);
     }
 }

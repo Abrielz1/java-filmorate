@@ -20,24 +20,28 @@ public class InDbMpaStorage implements MpaStorage {
 
     @Override
     public Collection<Mpa> findAll() {
-        String sql = "SELECT * FROM mpa";
-        return jdbcTemplate.query(sql, this::makeMpa);
+        String sqlQuery = "SELECT * FROM mpa";
+
+        return jdbcTemplate.query(sqlQuery, this::makeMpa);
     }
 
     @Override
     public Mpa getById(int id) {
-        String sql = "SELECT * FROM mpa WHERE id = ?";
-        SqlRowSet mpaRows = jdbcTemplate.queryForRowSet(sql, id);
+        String sqlQuery = "SELECT * FROM mpa WHERE id = ?";
+        SqlRowSet mpaRows = jdbcTemplate.queryForRowSet(sqlQuery, id);
+
         if (!mpaRows.next()) {
             log.warn("Рейтинг {} не найден.", id);
             throw new ObjectNotFoundException("Рейтинг не найден");
         }
-        return jdbcTemplate.queryForObject(sql, this::makeMpa, id);
+
+        return jdbcTemplate.queryForObject(sqlQuery, this::makeMpa, id);
     }
 
     private Mpa makeMpa(ResultSet resultSet, int rowNum) throws SQLException {
         int id = resultSet.getInt("id");
-        String name = resultSet.getString("name");
-        return new Mpa(id, name);
+        String nameMpa = resultSet.getString("name");
+
+        return new Mpa(id, nameMpa);
     }
 }
