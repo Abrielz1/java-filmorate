@@ -56,9 +56,9 @@ public class InDbUserStorage implements UserStorage {
     @Override
     public User update(User user) {
         final String checkQuery = "SELECT * FROM users WHERE id = ?";
-        SqlRowSet filmRows = jdbcTemplate.queryForRowSet(checkQuery, user.getId());
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet(checkQuery, user.getId());
 
-        if (!filmRows.next()) {
+        if (!userRows.next()) {
             log.warn("Пользователь с id {} не найден", user.getId());
             throw new ObjectNotFoundException("Пользователь не найден");
         }
@@ -75,9 +75,9 @@ public class InDbUserStorage implements UserStorage {
     @Override
     public User getById(int id) {
         final String sqlQuery = "SELECT * FROM users WHERE id = ?";
-        SqlRowSet filmRows = jdbcTemplate.queryForRowSet(sqlQuery, id);
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet(sqlQuery, id);
 
-        if (!filmRows.next()) {
+        if (!userRows.next()) {
             log.warn("Пользователь с идентификатором {} не найден.", id);
             throw new ObjectNotFoundException("Пользователь не найден");
         }
